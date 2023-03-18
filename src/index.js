@@ -75,7 +75,7 @@ function onDataCountry(params) {
   <h2>${params[0].name.official}</h2>
   <p>capital: ${params[0].capital}</p>
   <p>population: ${params[0].population}</p>
-  <p>languages: ${Object.values(params[0].languages)}</p>`;
+  <p>languages: ${Object.values(params[0].languages).join(' , ')}</p>`;
   countryInfo.insertAdjacentHTML('beforeEnd', bablo);
 }
 // Ukraine;
