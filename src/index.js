@@ -8,6 +8,7 @@ const countryInfo = document.querySelector('.country-info');
 userInput.addEventListener('input', debounce(onUserInput, DEBOUNCE_DELAY));
 function onUserInput(e) {
   countryInfo.innerHTML = '';
+  // :):):):):):)
   if (
     e.target.value === ' ' ||
     e.target.value === '  ' ||
@@ -18,6 +19,7 @@ function onUserInput(e) {
   ) {
     e.target.value = '';
   }
+  // :):):):):):)
   if (!e.target.value) {
     return;
   }
