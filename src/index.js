@@ -1,4 +1,5 @@
 import Notiflix from 'notiflix';
+import API from './api-servise';
 import './css/styles.css';
 const debounce = require('lodash.debounce');
 const DEBOUNCE_DELAY = 300;
@@ -7,69 +8,70 @@ const countryInfo = document.querySelector('.country-info');
 userInput.addEventListener('input', debounce(onUserInput, DEBOUNCE_DELAY));
 function onUserInput(e) {
   countryInfo.innerHTML = '';
+  if (
+    e.target.value === ' ' ||
+    e.target.value === '  ' ||
+    e.target.value === '   ' ||
+    e.target.value === '    ' ||
+    e.target.value === '     ' ||
+    e.target.value === '      '
+  ) {
+    e.target.value = '';
+  }
   if (!e.target.value) {
     return;
   }
-  fetchCountri()
+  API.fetchCountry()
     .then(data => {
-      const countryFilter = data.filter(fdf => {
-        return fdf.name.common
+      const countryFilter = data.filter(f => {
+        return f.name.common
           .toLowerCase()
-          .includes(e.target.value.toLowerCase().trim());
+          .includes(e.target.value.trim().toLowerCase());
       });
-      onCrietDispleu(countryFilter);
+      onCreatingInterfase(countryFilter);
     })
     .catch(err => {
       console.log(err);
     });
 }
-
-function fetchCountri() {
-  return fetch(
-    'https://restcountries.com/v3.1/all?fields=name,capital,population,flags,languages'
-  ).then(res => {
-    return res.json();
-  });
-}
-function onCrietDispleu(countryFilter) {
+function onCreatingInterfase(countryFilter) {
   if (1 < countryFilter.length && countryFilter.length > 11) {
-    onDataFaund();
+    onRequestRequest();
   } else {
     switch (countryFilter.length) {
       case 1:
         onDataCountry(countryFilter);
         break;
       case 0:
-        onDataNotFaund();
+        onCountryNotFound();
         break;
       default:
-        onInterfase(countryFilter);
+        onCoincidentCountry(countryFilter);
         break;
     }
   }
 }
-function onDataFaund() {
+function onRequestRequest() {
   Notiflix.Notify.info(
     'Too many matches found. Please enter a more specific name.'
   );
 }
-function onDataNotFaund() {
+function onCountryNotFound() {
   Notiflix.Notify.failure('Oops, there is no country with that name');
 }
-function onInterfase(params) {
+function onCoincidentCountry(params) {
   const tablo = params
-    .map(param => {
-      return `<div><img src="${param.flags.svg}" alt="Прапор" width="30">
-      <span style="color:red; font-size:26px;">  ${param.name.common}</span></div>`;
-    })
+    .map(
+      param => `<div><img src="${param.flags.svg}" alt="Прапор" width="30">
+      <span style="color:red; font-size:26px;">  ${param.name.common}</span></div>`
+    )
     .join('');
   countryInfo.insertAdjacentHTML('beforeEnd', tablo);
 }
 function onDataCountry(params) {
-  countryInfo.innerHTML = '';
   const bablo = `<img src="${params[0].flags.svg}" alt="Прапор" width="90">
-  <h2>${params[0].name.common}</h2>
-  <p>capital: ${params[0].capital[0]}</p>
+  <h2>${params[0].name.official}</h2>
+  <p>capital: ${params[0].capital}</p>
   <p>population: ${params[0].population}</p>
   <p>languages: ${Object.values(params[0].languages)}</p>`;
   countryInfo.insertAdjacentHTML('beforeEnd', bablo);
