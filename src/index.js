@@ -1,5 +1,5 @@
 import Notiflix from 'notiflix';
-import fetchCountry from './api-servise';
+import { fetchCountry } from './api-servise';
 import './css/styles.css';
 const debounce = require('lodash.debounce');
 const DEBOUNCE_DELAY = 300;
@@ -9,14 +9,7 @@ userInput.addEventListener('input', debounce(onUserInput, DEBOUNCE_DELAY));
 function onUserInput(e) {
   countryInfo.innerHTML = '';
   // :):):):):):)
-  if (
-    e.target.value === ' ' ||
-    e.target.value === '  ' ||
-    e.target.value === '   ' ||
-    e.target.value === '    ' ||
-    e.target.value === '     ' ||
-    e.target.value === '      '
-  ) {
+  if (e.target.value.trim() === '') {
     e.target.value = '';
   }
   // :):):):):):)
