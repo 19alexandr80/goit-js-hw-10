@@ -1,5 +1,5 @@
 import Notiflix from 'notiflix';
-import API from './api-servise';
+import fetchCountry from './api-servise';
 import './css/styles.css';
 const debounce = require('lodash.debounce');
 const DEBOUNCE_DELAY = 300;
@@ -23,7 +23,7 @@ function onUserInput(e) {
   if (!e.target.value) {
     return;
   }
-  API.fetchCountry()
+  fetchCountry()
     .then(data => {
       const countryFilter = data.filter(f => {
         return f.name.common
@@ -39,7 +39,7 @@ function onUserInput(e) {
 function onCreatingInterfase(countryFilter) {
   if (1 < countryFilter.length && countryFilter.length > 11) {
     onRequestRequest();
-  } else {
+  } else
     switch (countryFilter.length) {
       case 1:
         onDataCountry(countryFilter);
@@ -51,7 +51,6 @@ function onCreatingInterfase(countryFilter) {
         onCoincidentCountry(countryFilter);
         break;
     }
-  }
 }
 function onRequestRequest() {
   Notiflix.Notify.info(
